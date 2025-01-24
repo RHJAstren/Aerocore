@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "LiminalAeroSpace.sln"
+    "dotnet.defaultSolution": "Aerocore.sln"
 }
