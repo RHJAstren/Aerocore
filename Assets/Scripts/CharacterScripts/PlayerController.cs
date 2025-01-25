@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -10,12 +11,20 @@ public class PlayerController : Character
 {
     private PlayerState playerState = PlayerState.NORMAL;
 
+    [Header ("Player Jumping")]
+    public float jumpForce = 10.0f;
+    public float gravityMultiplier = 1.0f;
+
     public int bubbleCount = 0;
     public TextMeshProUGUI bubbleCountText;
 
     public GameObject PauseMenu;
 
     float baseSpeed = 0.0f;
+
+    public static PlayerController instance;
+
+    public event Action BubbleCollected;
 
     void Update(){
         switch (GameManager.gameState) {
@@ -97,6 +106,12 @@ public class PlayerController : Character
             Cursor.lockState = CursorLockMode.None;
             GameManager.ChangeScene(false);
         }
+    }
+
+    public void AddBubble(){
+        BubbleCollected.Invoke();
+        bubbleCount++;
+        bubbleCountText.text = "Bubbles: " + bubbleCount;
     }
 
     void Jump(){
