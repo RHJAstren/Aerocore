@@ -17,10 +17,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - whatIsWall
+  - whatIsGround
+  - whatIsPlayer
+  - Bubble
   - 
   - 
   - 

@@ -15,6 +15,8 @@ public class PlayerController : Character
 
     public GameObject PauseMenu;
 
+    float baseSpeed = 0.0f;
+
     void Update(){
         switch (GameManager.gameState) {
             case GameState.PLAY:
@@ -29,7 +31,6 @@ public class PlayerController : Character
             default:
                 break;
         }
-        Debug.Log($"Game State in Update: {GameManager.gameState}");
     }
     
     void PlayerMovement(){
@@ -52,22 +53,22 @@ public class PlayerController : Character
     void HandlePlayer(){
 
         if (Input.GetKey(KeyCode.W)){
-            transform.Translate(Vector3.forward * MovementSpeed * Time.deltaTime);
+            transform.Translate(Vector3.forward * baseSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.S)){
-            transform.Translate(Vector3.back * MovementSpeed * Time.deltaTime);
+            transform.Translate(Vector3.back * baseSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.A)){
-            transform.Translate(Vector3.left * MovementSpeed * Time.deltaTime);
+            transform.Translate(Vector3.left * baseSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.D)){
-            transform.Translate(Vector3.right * MovementSpeed * Time.deltaTime);
+            transform.Translate(Vector3.right * baseSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.LeftShift)){
-            MovementSpeed = 10.0f;
+            baseSpeed = RunSpeed;
         }
         else{
-            MovementSpeed = 5.5f;
+            baseSpeed = MovementSpeed;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape)){

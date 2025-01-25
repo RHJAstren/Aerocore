@@ -14,10 +14,6 @@ public class GameManager : Singleton<GameManager>
 {
     public static GameState gameState = GameState.MENU;
 
-    void Update(){
-        Debug.Log($"Game State in Update: {gameState}");
-    }
-
     protected override void Awake()
     {
         base.Awake();
