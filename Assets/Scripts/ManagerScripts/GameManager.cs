@@ -13,7 +13,10 @@ public enum GameState
 public class GameManager : Singleton<GameManager>
 {
     public static GameState gameState = GameState.MENU;
-    public GameObject PauseMenu;
+
+    void Update(){
+        Debug.Log($"Game State in Update: {gameState}");
+    }
 
     protected override void Awake()
     {
@@ -23,12 +26,11 @@ public class GameManager : Singleton<GameManager>
 
     public void StartGame(){
         gameState = GameState.PLAY;
-        StartCoroutine(LoadAsync(1));
+        ChangeScene(true);
     }
 
-    public void PauseGame(){
+    public static void PauseGame(){
         gameState = GameState.PAUSED;
-        PauseMenu.SetActive(true);
         Time.timeScale = 0;
     }
 
@@ -45,14 +47,9 @@ public class GameManager : Singleton<GameManager>
         Application.Quit();
     }
 
-    IEnumerator LoadAsync(int sceneIndex) {
-        gameState = GameState.PLAY;
-        Debug.Log("Game has started.");
-        AsyncOperation operation = SceneManager.LoadSceneAsync(sceneIndex);
-        while (!operation.isDone) {
-            float progress = Mathf.Clamp01(operation.progress / 0.9f);
-            Debug.Log("Loading progress: " + progress * 100 + "%");
-            yield return null;
-        }
+    public static void ChangeScene(bool isAddition){
+        int currentScene = SceneManager.GetActiveScene().buildIndex;
+        int nextScene = isAddition ? currentScene + 1 : currentScene - 1;
+        SceneManager.LoadScene(nextScene);
     }
 }

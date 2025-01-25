@@ -6,8 +6,6 @@ public class PlayerCam : MonoBehaviour
     public float sensitivity = 100.0f;
     public Transform playerBody;
 
-    void Start(){ Cursor.lockState = CursorLockMode.Locked; }
-
     void Update(){ MouseControls(); }
 
     void MouseControls(){

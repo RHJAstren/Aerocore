@@ -13,8 +13,10 @@ public class PlayerController : Character
     public int bubbleCount = 0;
     public TextMeshProUGUI bubbleCountText;
 
-    void Update(){ 
-        switch(GameManager.gameState){
+    public GameObject PauseMenu;
+
+    void Update(){
+        switch (GameManager.gameState) {
             case GameState.PLAY:
                 PlayerMovement();
                 break;
@@ -24,21 +26,31 @@ public class PlayerController : Character
             case GameState.GAME_OVER:
                 HandleGameOver();
                 break;
+            default:
+                break;
         }
+        Debug.Log($"Game State in Update: {GameManager.gameState}");
     }
     
     void PlayerMovement(){
-        switch (playerState){
+        switch (playerState)
+        {
             case PlayerState.NORMAL:
+                Debug.Log($"Player is in {playerState}");
                 HandlePlayer();
                 break;
             case PlayerState.DEAD:
+                Debug.Log($"Player is in {playerState}");
                 GameManager.gameState = GameState.GAME_OVER;
                 break;
         }
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        PauseMenu.SetActive(false);
     }
 
     void HandlePlayer(){
+
         if (Input.GetKey(KeyCode.W)){
             transform.Translate(Vector3.forward * MovementSpeed * Time.deltaTime);
         }
@@ -52,20 +64,37 @@ public class PlayerController : Character
             transform.Translate(Vector3.right * MovementSpeed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.LeftShift)){
-            MovementSpeed = 12.5f;
+            MovementSpeed = 10.0f;
         }
         else{
-            MovementSpeed = 7.5f;
+            MovementSpeed = 5.5f;
         }
-        if (Input.GetKey(KeyCode.Escape)){
-            GameManager.instance.PauseGame();
+
+        if (Input.GetKeyDown(KeyCode.Escape)){
+            GameManager.PauseGame();
         }
 
         if (Input.GetKeyDown(KeyCode.Space)){
             Jump();
         }
+
         if (Input.GetMouseButtonDown(0)){
             Attack();
+        }
+    }
+
+    void HandlePause(){
+        Cursor.lockState = CursorLockMode.None;
+        PauseMenu.SetActive(true);
+        if (Input.GetKeyDown(KeyCode.Escape) && GameManager.gameState == GameState.PAUSED){
+            GameManager.gameState = GameState.PLAY;
+            Time.timeScale = 1;
+        }
+        if (Input.GetKeyDown(KeyCode.Q)){
+            GameManager.gameState = GameState.MENU;
+            Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.None;
+            GameManager.ChangeScene(false);
         }
     }
 
@@ -75,14 +104,6 @@ public class PlayerController : Character
 
     public override void Attack(){
         Debug.Log("Player is attacking.");
-    }
-
-    void HandlePause(){
-        Debug.Log("Game is paused.");
-        if (Input.GetKeyDown(KeyCode.Escape) && GameManager.gameState == GameState.PAUSED){
-            GameManager.gameState = GameState.PLAY;
-            Time.timeScale = 1;
-        }
     }
     
     void HandleGameOver(){
