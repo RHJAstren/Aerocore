@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 
@@ -10,26 +9,55 @@ public enum PlayerState{
 public class PlayerController : Character
 {
     private PlayerState playerState = PlayerState.NORMAL;
+    float baseSpeed = 0.0f;
+    public static PlayerController instance;
+    private Rigidbody rb;
+    public bool isGrounded = true;
 
     [Header ("Player Jumping")]
     public float jumpForce = 10.0f;
     public float gravityMultiplier = 1.0f;
 
+    [Header ("Collectable")]
     public int bubbleCount = 0;
     public TextMeshProUGUI bubbleCountText;
 
+    [Header ("Ground Check")]
+    public Transform groundCheck;
+    public float groundDist = 0.2f;
+    public LayerMask groundLayer;
+
+    [Header ("Other")]
     public GameObject PauseMenu;
+    
+    void Awake(){
+        if (instance == null){
+            instance = this;
+        }
+        else{
+            Destroy(gameObject);
+        }
+    }
 
-    float baseSpeed = 0.0f;
+    void Start(){
+        rb = GetComponent<Rigidbody>();
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+    }
 
-    public static PlayerController instance;
-
-    public event Action BubbleCollected;
+    private void FixedUpdate(){
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDist, groundLayer);
+        
+        if (!isGrounded){
+            rb.AddForce(Physics.gravity * (gravityMultiplier - 1), ForceMode.Acceleration);
+        }
+    }
 
     void Update(){
         switch (GameManager.gameState) {
             case GameState.PLAY:
-                PlayerMovement();
+                if (isGrounded){
+                    PlayerMovement();
+                }
                 break;
             case GameState.PAUSED:
                 HandlePause();
@@ -109,13 +137,13 @@ public class PlayerController : Character
     }
 
     public void AddBubble(){
-        BubbleCollected.Invoke();
         bubbleCount++;
         bubbleCountText.text = "Bubbles: " + bubbleCount;
     }
 
     void Jump(){
         Debug.Log("Player is jumping.");
+        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
     public override void Attack(){

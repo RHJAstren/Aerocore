@@ -20,9 +20,9 @@ public class BubbleScript : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other){
+        Debug.Log($"Bubble: {gameObject.name}");
         if (other.CompareTag("Player")){
             PlayerController.instance.AddBubble();
-            Debug.Log("Bubble Collected");
             Destroy(gameObject);
         }
     }
