@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f42c0a8f523cd4478c8c830ae4e04e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensitivity: 250
+  sensitivity: 2000
   playerBody: {fileID: 6029396824590094199}
 --- !u!114 &7623318323586011249
 MonoBehaviour:
@@ -298,7 +298,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  enemy: {fileID: 7883504462498407241, guid: 9deb9402a3dd4cb4698a4bd85a83b89e, type: 3}
+  enemy: {fileID: 0}
 --- !u!54 &9168608551692057665
 Rigidbody:
   m_ObjectHideFlags: 0
