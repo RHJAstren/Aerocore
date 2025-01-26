@@ -20,6 +20,7 @@ public class PlayerController : Character
 
     [Header ("Collectable")]
     public int bubbleCount = 0;
+    public int bubbleCountFinal = 0;
     public TextMeshProUGUI bubbleCountText;
 
     [Header ("Ground Check")]
@@ -29,6 +30,11 @@ public class PlayerController : Character
 
     [Header ("Other")]
     public GameObject PauseMenu;
+    public GameObject CompletionMenu;
+    public GameObject[] Bubbles;
+    public Transform[] SpawnPoints;
+    public GameObject enemy;
+    private bool isCompleted = false;
     
     void Awake(){
         if (instance == null){
@@ -44,6 +50,8 @@ public class PlayerController : Character
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
         GameManager.gameState = GameState.PLAY;
         Cursor.lockState = CursorLockMode.Locked;
+        EnableBubbles();
+        Instantiate(enemy, InstantiateEnemy(), Quaternion.identity);
     }
 
     private void FixedUpdate(){
@@ -58,12 +66,14 @@ public class PlayerController : Character
         Debug.Log($"Player is in {GameManager.gameState}");
         switch (GameManager.gameState) {
             case GameState.PLAY:
-                if (isGrounded){
-                    PlayerMovement();
-                }
+                PlayerMovement();
                 break;
             case GameState.PAUSED:
                 HandlePause();
+                break;
+            case GameState.COMPLETED:
+                Debug.Log($"Player is in {playerState}");
+                HandleCompletion();
                 break;
             case GameState.GAME_OVER:
                 HandleGameOver();
@@ -71,6 +81,18 @@ public class PlayerController : Character
             default:
                 break;
         }
+    }
+
+    void EnableBubbles(){
+        foreach (GameObject bubble in Bubbles){
+            bubble.SetActive(true);
+        }
+    }
+
+    Vector3 InstantiateEnemy(){
+        int randomIndex = Random.Range(0, SpawnPoints.Length);
+        Vector3 spawnPos = SpawnPoints[randomIndex].position;
+        return spawnPos;
     }
     
     void PlayerMovement(){
@@ -85,8 +107,8 @@ public class PlayerController : Character
                 GameManager.gameState = GameState.GAME_OVER;
                 break;
         }
-        
         PauseMenu.SetActive(false);
+        CompletionMenu.SetActive(false);
     }
 
     void HandlePlayer(){
@@ -121,14 +143,48 @@ public class PlayerController : Character
         if (Input.GetMouseButtonDown(0)){
             Attack();
         }
+
+        if (bubbleCount % 5 == 0 && bubbleCount != 0 ) {
+            bubbleCount = 0;
+            GameManager.CompleteLevel();
+        }
     }
 
     void HandlePause(){
         Cursor.lockState = CursorLockMode.None;
         PauseMenu.SetActive(true);
+        FindAnyObjectByType<AudioManager>().Pause("GameMusic");
+        FindAnyObjectByType<AudioManager>().Play("PauseMusic");
         if (Input.GetKeyDown(KeyCode.Escape) && GameManager.gameState == GameState.PAUSED){
             GameManager.gameState = GameState.PLAY;
             Time.timeScale = 1;
+            FindAnyObjectByType<AudioManager>().Continue("GameMusic");
+            FindAnyObjectByType<AudioManager>().Stop("PauseMusic");
+        }
+        if (Input.GetKeyDown(KeyCode.Q)){
+            GameManager.gameState = GameState.MENU;
+            Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.None;
+            GameManager.ChangeScene(false);
+        }
+    }
+
+    void HandleCompletion(){
+        Cursor.lockState = CursorLockMode.None;
+        CompletionMenu.SetActive(true);
+        Debug.Log("Player has completed the level.");
+        FindAnyObjectByType<AudioManager>().Pause("GameMusic");
+        FindAnyObjectByType<AudioManager>().Play("PauseMusic");
+        if (Input.GetKeyDown(KeyCode.C)){
+            GameManager.gameState = GameState.PLAY;
+            Time.timeScale = 1;
+            Cursor.lockState = CursorLockMode.Locked;
+            EnableBubbles();
+            Vector3 newSpawnPos = InstantiateEnemy();
+            Debug.Log(enemy.transform.position = newSpawnPos);
+            transform.position = new Vector3(0, 1.12f, 0);
+            FindAnyObjectByType<AudioManager>().Continue("GameMusic");
+            FindAnyObjectByType<AudioManager>().Stop("PauseMusic");
         }
         if (Input.GetKeyDown(KeyCode.Q)){
             GameManager.gameState = GameState.MENU;
@@ -140,7 +196,8 @@ public class PlayerController : Character
 
     public void AddBubble(){
         bubbleCount++;
-        bubbleCountText.text = "Bubbles: " + bubbleCount;
+        bubbleCountFinal++;
+        bubbleCountText.text = "Bubbles: " + bubbleCountFinal;
     }
 
     void Jump(){

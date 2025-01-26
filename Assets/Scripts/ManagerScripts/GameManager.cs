@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public enum GameState
@@ -6,7 +7,8 @@ public enum GameState
     MENU = 100,
     PLAY = 101,
     PAUSED = 102,
-    GAME_OVER = 103
+    GAME_OVER = 103,
+    COMPLETED = 104
 }
 
 public class GameManager : Singleton<GameManager>
@@ -19,8 +21,13 @@ public class GameManager : Singleton<GameManager>
         DontDestroyOnLoad(gameObject);
     }
 
+    void Start(){
+        FindAnyObjectByType<AudioManager>().Play("MainMenu");
+    }
+
     public void StartGame(){
         gameState = GameState.PLAY;
+        FindAnyObjectByType<AudioManager>().Stop("MainMenu");
         ChangeScene(true);
     }
 
@@ -29,11 +36,16 @@ public class GameManager : Singleton<GameManager>
         Time.timeScale = 0;
     }
 
+    public static void CompleteLevel(){
+        gameState = GameState.COMPLETED;
+        Time.timeScale = 0;
+    }
+
     public void GameOver(){
         gameState = GameState.GAME_OVER;
     }
 
-    public void Reload(){
+    public static void Reload(){
         gameState = GameState.PLAY;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
