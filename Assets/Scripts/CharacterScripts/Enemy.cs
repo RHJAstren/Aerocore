@@ -45,6 +45,7 @@ public class Enemy : Character
         //Animation logic
         float velocity = agent.velocity.magnitude/agent.speed;
         animator.SetFloat("Forward", velocity);
+        animator.SetFloat("Speed", Mathf.Max(0.25f, velocity));
     }
 
     private void Patroling(){
