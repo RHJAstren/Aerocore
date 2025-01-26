@@ -42,6 +42,8 @@ public class PlayerController : Character
     void Start(){
         rb = GetComponent<Rigidbody>();
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        GameManager.gameState = GameState.PLAY;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void FixedUpdate(){
@@ -53,6 +55,7 @@ public class PlayerController : Character
     }
 
     void Update(){
+        Debug.Log($"Player is in {GameManager.gameState}");
         switch (GameManager.gameState) {
             case GameState.PLAY:
                 if (isGrounded){
@@ -83,7 +86,6 @@ public class PlayerController : Character
                 break;
         }
         
-        Cursor.lockState = CursorLockMode.Locked;
         PauseMenu.SetActive(false);
     }
 
