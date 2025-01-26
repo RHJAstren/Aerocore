@@ -608,7 +608,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 796543686743243653, guid: 7628b324c40a3774e84fe0c7f05af2ba, type: 3}
       propertyPath: music.Array.data[1].name
-      value: GameMusic
+      value: InGame
       objectReference: {fileID: 0}
     - target: {fileID: 796543686743243653, guid: 7628b324c40a3774e84fe0c7f05af2ba, type: 3}
       propertyPath: music.Array.data[2].clip
@@ -620,7 +620,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 796543686743243653, guid: 7628b324c40a3774e84fe0c7f05af2ba, type: 3}
       propertyPath: music.Array.data[2].name
-      value: PauseMusic
+      value: PauseMenu
       objectReference: {fileID: 0}
     - target: {fileID: 796543686743243653, guid: 7628b324c40a3774e84fe0c7f05af2ba, type: 3}
       propertyPath: sfx.Array.data[0].volume

@@ -1,7 +1,8 @@
 using TMPro;
 using UnityEngine;
 
-public enum PlayerState{
+public enum PlayerState
+{
     NORMAL,
     DEAD
 }
@@ -14,38 +15,51 @@ public class PlayerController : Character
     private Rigidbody rb;
     public bool isGrounded = true;
 
-    [Header ("Player Jumping")]
+    private AudioManager audioManager; // Cache AudioManager reference
+
+    [Header("Player Jumping")]
     public float jumpForce = 10.0f;
     public float gravityMultiplier = 1.0f;
 
-    [Header ("Collectable")]
+    [Header("Collectable")]
     public int bubbleCount = 0;
     public int bubbleCountFinal = 0;
     public TextMeshProUGUI bubbleCountText;
 
-    [Header ("Ground Check")]
+    [Header("Ground Check")]
     public Transform groundCheck;
     public float groundDist = 0.2f;
     public LayerMask groundLayer;
 
-    [Header ("Other")]
+    [Header("Other")]
     public GameObject PauseMenu;
     public GameObject CompletionMenu;
     public GameObject[] Bubbles;
     public Transform[] SpawnPoints;
     public GameObject enemy;
     private bool isCompleted = false;
-    
-    void Awake(){
-        if (instance == null){
+
+    void Awake()
+    {
+        if (instance == null)
+        {
             instance = this;
         }
-        else{
+        else
+        {
             Destroy(gameObject);
         }
     }
 
-    void Start(){
+    void Start()
+    {
+        // Cache AudioManager reference
+        audioManager = FindAnyObjectByType<AudioManager>();
+        if (audioManager == null)
+        {
+            Debug.LogError("AudioManager not found in the scene!");
+        }
+
         rb = GetComponent<Rigidbody>();
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
         GameManager.gameState = GameState.PLAY;
@@ -54,17 +68,21 @@ public class PlayerController : Character
         Instantiate(enemy, InstantiateEnemy(), Quaternion.identity);
     }
 
-    private void FixedUpdate(){
+    private void FixedUpdate()
+    {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDist, groundLayer);
-        
-        if (!isGrounded){
+
+        if (!isGrounded)
+        {
             rb.AddForce(Physics.gravity * (gravityMultiplier - 1), ForceMode.Acceleration);
         }
     }
 
-    void Update(){
+    void Update()
+    {
         Debug.Log($"Player is in {GameManager.gameState}");
-        switch (GameManager.gameState) {
+        switch (GameManager.gameState)
+        {
             case GameState.PLAY:
                 PlayerMovement();
                 break;
@@ -83,19 +101,23 @@ public class PlayerController : Character
         }
     }
 
-    void EnableBubbles(){
-        foreach (GameObject bubble in Bubbles){
+    void EnableBubbles()
+    {
+        foreach (GameObject bubble in Bubbles)
+        {
             bubble.SetActive(true);
         }
     }
 
-    Vector3 InstantiateEnemy(){
+    Vector3 InstantiateEnemy()
+    {
         int randomIndex = Random.Range(0, SpawnPoints.Length);
         Vector3 spawnPos = SpawnPoints[randomIndex].position;
         return spawnPos;
     }
-    
-    void PlayerMovement(){
+
+    void PlayerMovement()
+    {
         switch (playerState)
         {
             case PlayerState.NORMAL:
@@ -111,105 +133,102 @@ public class PlayerController : Character
         CompletionMenu.SetActive(false);
     }
 
-    void HandlePlayer(){
-
-        if (Input.GetKey(KeyCode.W)){
+    void HandlePlayer()
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
             transform.Translate(Vector3.forward * baseSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.S)){
+        if (Input.GetKey(KeyCode.S))
+        {
             transform.Translate(Vector3.back * baseSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.A)){
+        if (Input.GetKey(KeyCode.A))
+        {
             transform.Translate(Vector3.left * baseSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.D)){
+        if (Input.GetKey(KeyCode.D))
+        {
             transform.Translate(Vector3.right * baseSpeed * Time.deltaTime);
         }
-        if (Input.GetKey(KeyCode.LeftShift)){
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
             baseSpeed = RunSpeed;
         }
-        else{
+        else
+        {
             baseSpeed = MovementSpeed;
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape)){
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
             GameManager.PauseGame();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)){
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             Jump();
         }
 
-        if (Input.GetMouseButtonDown(0)){
+        if (Input.GetMouseButtonDown(0))
+        {
             Attack();
         }
 
-        if (bubbleCount % 5 == 0 && bubbleCount != 0 ) {
+        if (bubbleCount % 200 == 0 && bubbleCount != 0)
+        {
             bubbleCount = 0;
             GameManager.CompleteLevel();
+            if (audioManager != null)
+            {
+                audioManager.Stop("GameMusic");
+                audioManager.Play("CompletionMusic");
+            }
         }
     }
 
-    void HandlePause(){
+    void HandlePause()
+    {
         Cursor.lockState = CursorLockMode.None;
         PauseMenu.SetActive(true);
-        FindAnyObjectByType<AudioManager>().Pause("GameMusic");
-        FindAnyObjectByType<AudioManager>().Play("PauseMusic");
-        if (Input.GetKeyDown(KeyCode.Escape) && GameManager.gameState == GameState.PAUSED){
-            GameManager.gameState = GameState.PLAY;
-            Time.timeScale = 1;
-            FindAnyObjectByType<AudioManager>().Continue("GameMusic");
-            FindAnyObjectByType<AudioManager>().Stop("PauseMusic");
-        }
-        if (Input.GetKeyDown(KeyCode.Q)){
-            GameManager.gameState = GameState.MENU;
-            Time.timeScale = 1;
-            Cursor.lockState = CursorLockMode.None;
-            GameManager.ChangeScene(false);
+        audioManager.Pause("GameMusic");
+        audioManager.Play("PauseMusic");
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameManager.ResumeGame();
+            audioManager.Stop("PauseMusic");
+            audioManager.Continue("GameMusic");
         }
     }
 
-    void HandleCompletion(){
-        Cursor.lockState = CursorLockMode.None;
+    void HandleCompletion()
+    {
         CompletionMenu.SetActive(true);
-        Debug.Log("Player has completed the level.");
-        FindAnyObjectByType<AudioManager>().Pause("GameMusic");
-        FindAnyObjectByType<AudioManager>().Play("PauseMusic");
-        if (Input.GetKeyDown(KeyCode.C)){
-            GameManager.gameState = GameState.PLAY;
-            Time.timeScale = 1;
-            Cursor.lockState = CursorLockMode.Locked;
-            EnableBubbles();
-            Vector3 newSpawnPos = InstantiateEnemy();
-            Debug.Log(enemy.transform.position = newSpawnPos);
-            transform.position = new Vector3(0, 1.12f, 0);
-            FindAnyObjectByType<AudioManager>().Continue("GameMusic");
-            FindAnyObjectByType<AudioManager>().Stop("PauseMusic");
-        }
-        if (Input.GetKeyDown(KeyCode.Q)){
-            GameManager.gameState = GameState.MENU;
-            Time.timeScale = 1;
-            Cursor.lockState = CursorLockMode.None;
-            GameManager.ChangeScene(false);
-        }
+        audioManager.Stop("GameMusic");
+        audioManager.Play("CompletionMusic");
     }
 
-    public void AddBubble(){
+    public void AddBubble()
+    {
         bubbleCount++;
         bubbleCountFinal++;
         bubbleCountText.text = "Bubbles: " + bubbleCountFinal;
     }
 
-    void Jump(){
+    void Jump()
+    {
         Debug.Log("Player is jumping.");
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
     }
 
-    public override void Attack(){
+    public override void Attack()
+    {
         Debug.Log("Player is attacking.");
     }
-    
-    void HandleGameOver(){
+
+    void HandleGameOver()
+    {
         playerState = PlayerState.DEAD;
         Debug.Log("Game Over.");
     }

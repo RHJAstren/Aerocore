@@ -15,21 +15,21 @@ public class AudioManager : Singleton<AudioManager>
     public const string MUSIC_VOLUME = "Music";
     public const string SFX_VOLUME = "sfx";
 
-    // Start is called before the first frame update
-    protected override void Awake() {
+    protected override void Awake()
+    {
         base.Awake();
-
         DontDestroyOnLoad(gameObject);
 
-        initSound(music, musicMixer);
-        initSound(sfx, sfxMixer);
-        initSound(spooky, sfxMixer);
+        InitializeSounds(music, musicMixer);
+        InitializeSounds(sfx, sfxMixer);
+        InitializeSounds(spooky, sfxMixer);
 
         LoadVolume();
     }
 
-    void initSound(Sound[] sfx, AudioMixerGroup mixer) {
-        foreach (Sound s in sfx)
+    private void InitializeSounds(Sound[] sounds, AudioMixerGroup mixer)
+    {
+        foreach (Sound s in sounds)
         {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
@@ -40,62 +40,58 @@ public class AudioManager : Singleton<AudioManager>
         }
     }
 
-    public void Play(string name) {
-        Sound s = findSound(name);
-        if (s == null) {
-            Debug.LogWarning("No sound: " + name + " was found");
+    public void Play(string name)
+    {
+        Sound s = FindSound(name);
+        if (s == null)
+        {
+            Debug.LogWarning($"AudioManager: Sound '{name}' not found.");
             return;
         }
-
-        // use: FindAnyObjectByType<AudioManager>().Play("name of sound")
-
         s.source.Play();
     }
 
-    public void Pause(string name) {
-        Sound s = findSound(name);
-        if (s == null) {
-            Debug.LogWarning("No sound: " + name + " was found");
-            return;
-        }
-
+    public void Pause(string name)
+    {
+        Sound s = FindSound(name);
+        if (s == null) return;
         s.source.Pause();
     }
 
-    public void Continue(string name){
-        Sound s = findSound(name);
-        if (s == null){
-            Debug.LogWarning("No sound: " + name + " was found");
-            return;
-        }
-
+    public void Continue(string name)
+    {
+        Sound s = FindSound(name);
+        if (s == null) return;
         s.source.UnPause();
     }
 
-    public void Stop(string name) {
-        Sound s = findSound(name);
-        if (s == null) {
-            Debug.LogWarning("No sound: " + name + " was found");
-            return;
-        }
-
+    public void Stop(string name)
+    {
+        Sound s = FindSound(name);
+        if (s == null) return;
         s.source.Stop();
     }
 
-    Sound findSound(string name) {
-        Sound s = Array.Find(music, sound => sound.name == name) 
-            ?? Array.Find(sfx, sound => sound.name == name)
-            ?? Array.Find(spooky, sound => sound.name == name);
-
-        return s;
+    public void StopAll()
+    {
+        foreach (Sound s in music) if (s.source.isPlaying) s.source.Stop();
+        foreach (Sound s in sfx) if (s.source.isPlaying) s.source.Stop();
+        foreach (Sound s in spooky) if (s.source.isPlaying) s.source.Stop();
     }
 
-    void LoadVolume()
+    private Sound FindSound(string name)
+    {
+        return Array.Find(music, sound => sound.name == name)
+            ?? Array.Find(sfx, sound => sound.name == name)
+            ?? Array.Find(spooky, sound => sound.name == name);
+    }
+
+    private void LoadVolume()
     {
         float musicVol = PlayerPrefs.GetFloat(MUSIC_VOLUME, 0.75f);
         float sfxVol = PlayerPrefs.GetFloat(SFX_VOLUME, 0.75f);
 
-        musicMixer.audioMixer.SetFloat(MUSIC_VOLUME, PlayerPrefs.GetFloat(MUSIC_VOLUME, Mathf.Log10(musicVol) * 20));
-        sfxMixer.audioMixer.SetFloat(SFX_VOLUME, PlayerPrefs.GetFloat(SFX_VOLUME, Mathf.Log10(sfxVol) * 20));
+        musicMixer.audioMixer.SetFloat(MUSIC_VOLUME, Mathf.Log10(musicVol) * 20);
+        sfxMixer.audioMixer.SetFloat(SFX_VOLUME, Mathf.Log10(sfxVol) * 20);
     }
 }
