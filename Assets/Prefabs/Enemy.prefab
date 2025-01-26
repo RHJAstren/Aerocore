@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 395292189743429979}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -132,7 +132,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
@@ -204,8 +204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b30c0da45dbbe5458823eda11ad350e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 5.5
-  RunSpeed: 8.5
+  MovementSpeed: 10
+  RunSpeed: 12.5
   agent: {fileID: 8991192840736718850}
   Player: {fileID: 0}
   whatIsGround:
@@ -217,7 +217,7 @@ MonoBehaviour:
   walkPoint: {x: 0, y: 0, z: 0}
   walkPointRange: 100
   timeBetweenAttacks: 1.2
-  sightRange: 25
+  sightRange: 75
   attackRange: 5
   playerInSightRange: 0
   playerInAttackRange: 0

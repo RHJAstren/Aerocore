@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerOld : MonoBehaviour
 {
     public float walkSpeed = 5f;        // Walking speed
     public float sprintSpeed = 10f;    // Sprinting speed
