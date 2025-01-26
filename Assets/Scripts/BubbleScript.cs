@@ -22,6 +22,7 @@ public class BubbleScript : MonoBehaviour
     private void OnTriggerEnter(Collider other){
         if (other.CompareTag("Player")){
             PlayerController.instance.AddBubble();
+            FindAnyObjectByType<AudioManager>().Play("Bubble");
             gameObject.SetActive(false);
         }
     }

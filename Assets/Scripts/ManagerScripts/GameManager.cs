@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public enum GameState
@@ -20,8 +21,13 @@ public class GameManager : Singleton<GameManager>
         DontDestroyOnLoad(gameObject);
     }
 
+    void Start(){
+        FindAnyObjectByType<AudioManager>().Play("MainMenu");
+    }
+
     public void StartGame(){
         gameState = GameState.PLAY;
+        FindAnyObjectByType<AudioManager>().Stop("MainMenu");
         ChangeScene(true);
     }
 
