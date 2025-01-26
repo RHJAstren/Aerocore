@@ -9,6 +9,8 @@ public class Enemy : Character
 
     public LayerMask whatIsGround, whatIsPlayer;
 
+    public Animator animator;
+
     [Header ("Patroling")]
     public Vector3 walkPoint;
     bool walkPointSet;
@@ -39,6 +41,10 @@ public class Enemy : Character
         if(!playerInSightRange && !playerInAttackRange) Patroling();
         if(playerInSightRange && !playerInAttackRange) ChasePlayer();
         if(playerInAttackRange && playerInSightRange) Attack();
+        
+        //Animation logic
+        float velocity = agent.velocity.magnitude/agent.speed;
+        animator.SetFloat("Forward", velocity);
     }
 
     private void Patroling(){
