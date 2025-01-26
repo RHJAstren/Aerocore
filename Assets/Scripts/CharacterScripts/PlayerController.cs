@@ -58,9 +58,7 @@ public class PlayerController : Character
         Debug.Log($"Player is in {GameManager.gameState}");
         switch (GameManager.gameState) {
             case GameState.PLAY:
-                if (isGrounded){
-                    PlayerMovement();
-                }
+                PlayerMovement();
                 break;
             case GameState.PAUSED:
                 HandlePause();
