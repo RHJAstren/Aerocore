@@ -14,13 +14,13 @@ TagManager:
   - 
   - 
   - 
+  - Collectable
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - whatIsWall
+  - whatIsGround
+  - whatIsPlayer
+  - Bubble
   - 
   - 
   - 
