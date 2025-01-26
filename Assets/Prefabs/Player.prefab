@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 235762697948532972}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.063, z: 0}
+  m_LocalPosition: {x: 0, y: -1.127, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -152,12 +152,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 433faa8b758afed4f9295b193c697276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _PixelationFactor: 1
+  _PixelationFactor: 0.258
   _ColorEmulationMode: 3
   _FullscreenColorDepth: {x: 256, y: 256, z: 256}
   _FullscreenDitherDepth: {x: 32, y: 32, z: 32}
-  _DitheringMatrixSize: 2
-  _DitheringScale: 1
+  _DitheringMatrixSize: 1
+  _DitheringScale: 0.387
   _InterlacingSize: 1
   _PostProcessShader: {fileID: 4800000, guid: 56d52fd5b7c6911468179e5a7359ce0e, type: 3}
   _PostProcessShaderAccurate: {fileID: 4800000, guid: 2ebed186567d3c244a87538744a62920, type: 3}
@@ -219,7 +219,6 @@ GameObject:
   - component: {fileID: 1010053934903199405}
   - component: {fileID: 9168608551692057665}
   - component: {fileID: 1080262849035420360}
-  - component: {fileID: 7302408966684829130}
   m_Layer: 14
   m_Name: Player
   m_TagString: Player
@@ -258,19 +257,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80c98d465c46efa4d952229320ea53ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 22.5
-  RunSpeed: 30
+  MovementSpeed: 8.5
+  RunSpeed: 15
   isGrounded: 1
-  jumpForce: 10
+  jumpForce: 3
   gravityMultiplier: 1
   bubbleCount: 0
+  bubbleCountFinal: 0
   bubbleCountText: {fileID: 0}
   groundCheck: {fileID: 3190793757676526304}
-  groundDist: 0.2
+  groundDist: 0.1
   groundLayer:
     serializedVersion: 2
     m_Bits: 8192
   PauseMenu: {fileID: 0}
+  CompletionMenu: {fileID: 0}
+  Bubbles:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  SpawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  enemy: {fileID: 7883504462498407241, guid: 9deb9402a3dd4cb4698a4bd85a83b89e, type: 3}
 --- !u!54 &9168608551692057665
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -295,9 +323,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 2
+  m_CollisionDetection: 1
 --- !u!136 &1080262849035420360
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -321,27 +349,6 @@ CapsuleCollider:
   m_Height: 2.06
   m_Direction: 1
   m_Center: {x: 0.015390456, y: 0, z: 0.013836384}
---- !u!65 &7302408966684829130
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5672397817777741312}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.1291509, y: 1, z: 1.2029076}
-  m_Center: {x: 0.0027894974, y: 0, z: -0.011412382}
 --- !u!1 &6144821587651147964
 GameObject:
   m_ObjectHideFlags: 0
