@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class BubbleScript : MonoBehaviour
 {
-    [Range(50f, 150f)]
-    public float rotSpeed = 50f;
+    [Range(0f, 150f)]
+    public float rotSpeed = 0f;
     public float moveSpeed = 1.0f;
     public float moveDistance = 0.5f;
 
