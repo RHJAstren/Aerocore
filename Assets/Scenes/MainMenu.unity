@@ -973,6 +973,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PSXFilter
       objectReference: {fileID: 0}
+    - target: {fileID: 1882508266146226460, guid: 3e7844a5f8a57e8479fc59892ba776c2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
