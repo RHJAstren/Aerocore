@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 235762697948532972}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.99, z: 0}
+  m_LocalPosition: {x: 0, y: -1.063, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -219,6 +219,7 @@ GameObject:
   - component: {fileID: 1010053934903199405}
   - component: {fileID: 9168608551692057665}
   - component: {fileID: 1080262849035420360}
+  - component: {fileID: 7302408966684829130}
   m_Layer: 14
   m_Name: Player
   m_TagString: Player
@@ -260,7 +261,7 @@ MonoBehaviour:
   MovementSpeed: 22.5
   RunSpeed: 30
   isGrounded: 1
-  jumpForce: 1000
+  jumpForce: 10
   gravityMultiplier: 1
   bubbleCount: 0
   bubbleCountText: {fileID: 0}
@@ -286,19 +287,42 @@ Rigidbody:
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8192
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!136 &1080262849035420360
 CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5672397817777741312}
+  m_Material: {fileID: 13400000, guid: 0c5fdfb44d6f19646a41a0720fbf751a, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5331571
+  m_Height: 2.06
+  m_Direction: 1
+  m_Center: {x: 0.015390456, y: 0, z: 0.013836384}
+--- !u!65 &7302408966684829130
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -315,11 +339,9 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.58
-  m_Height: 2.06
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 3
+  m_Size: {x: 1.1291509, y: 1, z: 1.2029076}
+  m_Center: {x: 0.0027894974, y: 0, z: -0.011412382}
 --- !u!1 &6144821587651147964
 GameObject:
   m_ObjectHideFlags: 0
