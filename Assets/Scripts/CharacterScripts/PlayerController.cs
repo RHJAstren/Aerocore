@@ -165,7 +165,7 @@ public class PlayerController : Character
             GameManager.PauseGame();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) // Only jump if grounded
         {
             Jump();
         }
@@ -179,6 +179,7 @@ public class PlayerController : Character
         {
             bubbleCount = 0;
             GameManager.CompleteLevel();
+            Debug.Log("Player has won!"); // Log win
             if (audioManager != null)
             {
                 audioManager.Stop("GameMusic");
@@ -205,6 +206,7 @@ public class PlayerController : Character
     void HandleCompletion()
     {
         CompletionMenu.SetActive(true);
+        Debug.Log("Level Completed!"); // Log completion
         audioManager.Stop("GameMusic");
         audioManager.Play("CompletionMusic");
     }
@@ -218,8 +220,11 @@ public class PlayerController : Character
 
     void Jump()
     {
-        Debug.Log("Player is jumping.");
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if (isGrounded) // Ensure the player is grounded before jumping
+        {
+            Debug.Log("Player is jumping.");
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
 
     public override void Attack()
@@ -230,6 +235,6 @@ public class PlayerController : Character
     void HandleGameOver()
     {
         playerState = PlayerState.DEAD;
-        Debug.Log("Game Over.");
+        Debug.Log("Game Over. Player has lost!"); // Log lose
     }
 }
