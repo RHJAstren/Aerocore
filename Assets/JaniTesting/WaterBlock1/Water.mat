@@ -144,7 +144,7 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _Transparency: 0.956
+    - _Transparency: 0.715
     - _WaveSpeed: 0.00879
     - _Wave_Speed: 0.01
     - _WorkflowMode: 1
